@@ -1,8 +1,15 @@
 ﻿using System;
 
-public class Class1
+public class Container
 {
-	public Class1()
+	private int masa;
+	private int wysokosc;
+	private int wagaWlasna;
+	private int glebokosc;
+	private string numerSeryjny;
+	private int maksLadownosc;
+	public Container()
 	{
+
 	}
 }
