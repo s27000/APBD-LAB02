@@ -4,7 +4,7 @@
     {
         static void Main(string[] args)
         {
-
+            Container nowyKontener = new Container("KON-C-1");
         }
     }
 }

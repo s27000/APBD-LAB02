@@ -8,8 +8,9 @@ public class Container
 	private int glebokosc;
 	private string numerSeryjny;
 	private int maksLadownosc;
-	public Container()
+	public Container(string numerSeryjny)
 	{
-
+		this.numerSeryjny = numerSeryjny;
+		//Console.Write(numerSeryjny);
 	}
 }
