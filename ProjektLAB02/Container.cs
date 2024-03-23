@@ -6,23 +6,27 @@ public class Container
     private int height;
     private int depth;
     private int conWeight;
+    private int maxProductWeight;
 
     private int productMass;
-    private int maxProductWeight;
-	public Container(string serialNum, int height, int depth, int conWeight)
+	public Container(string serialNum, int height, int depth, int conWeight, int maxProductWeight)
 	{
 		this.serialNum = serialNum;
 		this.height = height;
 		this.depth = depth;
 		this.conWeight = conWeight;
+		this.maxProductWeight = maxProductWeight;
 
         productMass = 0;
-        maxProductWeight = 0;
 	}
 
 	public void loadProduct(int productMass)
 	{
-		this.productMass = productMass;
+		if (productMass > maxProductWeight)
+		{
+            throw new OverfillException("cos");
+		}
+        this.productMass = productMass;
 	}
 	public void unloadProduct()
 	{
