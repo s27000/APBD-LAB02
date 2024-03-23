@@ -2,15 +2,36 @@
 
 public class Container
 {
-	private int masa;
-	private int wysokosc;
-	private int wagaWlasna;
-	private int glebokosc;
-	private string numerSeryjny;
-	private int maksLadownosc;
-	public Container(string numerSeryjny)
+	private string serialNum;
+    private int height;
+    private int depth;
+    private int conWeight;
+
+    private int productMass;
+    private int maxProductWeight;
+	public Container(string serialNum, int height, int depth, int conWeight)
 	{
-		this.numerSeryjny = numerSeryjny;
-		//Console.Write(numerSeryjny);
+		this.serialNum = serialNum;
+		this.height = height;
+		this.depth = depth;
+		this.conWeight = conWeight;
+
+        productMass = 0;
+        maxProductWeight = 0;
 	}
+
+	public void loadProduct(int productMass)
+	{
+		this.productMass = productMass;
+	}
+	public void unloadProduct()
+	{
+        productMass = 0;
+	}
+
+    public string toString()
+	{
+		return "KONTENER: " + serialNum +
+			"\n";	
+ 	}
 }
