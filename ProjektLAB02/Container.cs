@@ -20,7 +20,7 @@ public class Container
         productMass = 0;
 	}
 
-	public void loadProduct(int productMass)
+	public void LoadProduct(int productMass)
 	{
 		if (productMass > maxProductWeight)
 		{
@@ -28,12 +28,12 @@ public class Container
 		}
         this.productMass = productMass;
 	}
-	public void unloadProduct()
+	public void UnloadProduct()
 	{
         productMass = 0;
 	}
 
-    public string toString()
+    public string ToString()
 	{
 		return "KONTENER: " + serialNum +
 			"\n";	

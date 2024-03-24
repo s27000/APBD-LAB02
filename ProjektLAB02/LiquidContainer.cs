@@ -7,7 +7,7 @@ public class LiquidContainer : Container, IHazardNotifier
 		
 	}
 
-	public void notifyHazard()
+	public void NotifyHazard()
 	{
 
 	}
