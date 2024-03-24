@@ -20,6 +20,7 @@ public class LiquidContainer : Container, IHazardNotifier
 			throw new OverfillException("Kontener " + SerialNum + " jest przeładowany");
 		}
 	}
+
 	public void NotifyHazard()
 	{
 		Console.WriteLine("WYKRYTO NIEBEZPIECZEŃSTWO: Kontener " + SerialNum + " jest wysoce załadowany niebezpieczną substancją!");

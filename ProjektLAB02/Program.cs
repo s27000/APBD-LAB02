@@ -52,8 +52,28 @@ namespace ProjektLAB02
                             case 7:
                                 AddContainerToShip();
                                 break;
+                            case 9:
+                                AddContainerListToShip();
+                                break;
+                            case 10:
+                                ExchangeContainerOnShip();
+                                break;
                         }
                     }
+                    if (!shipsEmpty())
+                    {
+                        switch (option)
+                        {
+                            case 8:
+                                RemoveContainerFromShip();
+                                break;
+                            case 11:
+                                ExchangeContainersBetweenShips();
+                                break;
+
+                        }
+                    }
+
                 }
             } while (option != 0);
         }
@@ -114,9 +134,35 @@ namespace ProjektLAB02
                         "\n6. Rozładuj kontener" +
                         "\n7. Załaduj kontener na statek");
                 }
+                if (!shipsEmpty())
+                {
+                     Console.WriteLine("8. Usuń kontener z statku");
+                }
+                if (containerList.Any())
+                {
+                    Console.WriteLine("9. Załaduj liste kontenerów na statek" +
+                       "\n10. Zastąp kontener na statku innym kontenerem");
+                }
+                if (!shipsEmpty())
+                {
+                    Console.WriteLine("11. Przenieś kontener między dwoma statkami");
+                }
             }
             Console.WriteLine("0. Wyjscie z programu");
         }
+
+        static bool shipsEmpty()
+        {
+            foreach (Ship i in shipList)
+            {
+                if (!i.isEmpty)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         static void AddShip()
         {
             Console.WriteLine("DODAWANIE STATKU");
@@ -169,6 +215,9 @@ namespace ProjektLAB02
                 case 2:
                     AddGazContainer();
                     break;
+                case 3:
+                    AddCoolantContainer();
+                    break;
             }
         }
 
@@ -206,6 +255,16 @@ namespace ProjektLAB02
             containerList.Remove(con);
         }
 
+        static void AddContainerListToShip()
+        {
+            Console.WriteLine("ZAŁADOWANIE LISTY KONTENERÓW NA STATEK");
+            PrintShipList();
+            Console.Write("Podaj numer statku: ");
+            int shipID = Convert.ToInt32(Console.ReadLine());
+            Console.Clear();
+            findShip(shipID).AddContainerList(containerList);
+            containerList.Clear();
+        }
         static Container findContainerFromList(String serialNum)
         {
             foreach(Container c in containerList)
@@ -226,6 +285,48 @@ namespace ProjektLAB02
             containerList.Remove(findContainerFromList(serialNum));
         }
 
+        static void RemoveContainerFromShip(){
+            Console.WriteLine("USUŃ KONTENER ZE STATEK");
+            PrintShipList();
+            Console.Write("Podaj numer statku: ");
+            int shipID = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Podaj numer seryjny kontenera: ");
+            string serialNum = Console.ReadLine();
+            Console.Clear();
+            containerList.Add(findShip(shipID).RemoveContainer(serialNum));
+        }
+
+        static void ExchangeContainerOnShip()
+        {
+            Console.WriteLine("WYMIEŃ KONTENER ZE STATKU Z INNNYM KONTENEREM");
+            PrintShipList();
+            Console.Write("Podaj numer statku: ");
+            int shipID = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Podaj numer seryjny kontenera na statku: ");
+            string serialNumShip = Console.ReadLine();
+            PrintContainerList();
+            Console.Write("Podaj numer seryjny kontenera: ");
+            string serialNumExchange = Console.ReadLine();
+            Console.Clear();
+            containerList.Add(findShip(shipID).RemoveContainer(serialNumShip));
+            findShip(shipID).AddContainer(findContainerFromList(serialNumExchange));
+            containerList.Remove(findContainerFromList(serialNumExchange));
+        }
+
+        static void ExchangeContainersBetweenShips() {
+            Console.WriteLine("WYMIEŃ KONTENERY MIEDZY STATKAMI");
+            PrintShipList();
+            Console.Write("Podaj numer statku wysyłającego: ");
+            int shipID = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Podaj numer seryjny kontenera: ");
+            string serialNum = Console.ReadLine();
+
+            Console.Write("Podaj numer statku docelowego: ");
+            int shipID2 = Convert.ToInt32(Console.ReadLine());
+            Console.Clear();
+            findShip(shipID2).AddContainer(findShip(shipID).RemoveContainer(serialNum));
+        }
+
         static void AddLiquidContainer(){
             Console.WriteLine("DODAWANIE KONTENERA NA PŁYNY");
             Console.Write("Podaj wysokość kontenera: ");
@@ -243,7 +344,7 @@ namespace ProjektLAB02
         }
 
         static void AddGazContainer() {
-            Console.WriteLine("DODAWANIE KONTENERA NA PŁYNY");
+            Console.WriteLine("DODAWANIE KONTENERA NA GAZ");
             Console.Write("Podaj wysokość kontenera: ");
             int height = Convert.ToInt32(Console.ReadLine());
             Console.Write("Podaj głębokość kontenera: ");
@@ -254,8 +355,27 @@ namespace ProjektLAB02
             int maxProductWeight = Convert.ToInt32(Console.ReadLine());
             Console.Write("Podaj cisnienie(atm) ładunku: ");
             int pressure = Convert.ToInt32(Console.ReadLine());
-            containerList.Add(new GazContainer("KON-G-" + (++containerIDCounter), height, depth, conWeight, maxProductWeight, pressure));
             Console.Clear();
+            containerList.Add(new GazContainer("KON-G-" + (++containerIDCounter), height, depth, conWeight, maxProductWeight, pressure));
+        }
+
+        static void AddCoolantContainer()
+        {
+            Console.WriteLine("DODAWANIE KONTENERA CHŁODNICZEGO");
+            Console.Write("Podaj wysokość kontenera: ");
+            int height = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Podaj głębokość kontenera: ");
+            int depth = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Podaj wagę(kg) kontenera: ");
+            int conWeight = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Podaj maksymalną wagę(kg) ładunku: ");
+            int maxProductWeight = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Podaj typ produktu: ");
+            string productName = Console.ReadLine();
+            Console.Write("Podaj temperature wewnątrz kontenera: ");
+            double temperature = Convert.ToDouble(Console.ReadLine());
+            Console.Clear();
+            containerList.Add(new CoolantContainer("KON-C-" + (++containerIDCounter), height, depth, conWeight, maxProductWeight, productName, temperature));
         }
     }
 }

@@ -10,12 +10,19 @@ public class Ship
 		get {
 			string output = "";
 			foreach (Container con in containersList) {
-				output += "\t" + con;
+				output += "\t" + con + "\n";
 			}
 			return output;
 		} 
 	} 
 
+	public bool isEmpty { 
+		get {
+			if (containersList.Any()) {
+				return false;
+			}
+			return true;
+		} }
 	private int speed;
 	private int maxContainerNum;
 	private int maxWeight;
@@ -42,6 +49,26 @@ public class Ship
 		{
 			throw new OverfillException("Statek " + shipID + " jest przeladowany");
 		}
+	}
+
+	public void AddContainerList(List<Container> containersList){
+		foreach(Container con in containersList)
+		{
+			this.containersList.Add(con);
+		}
+	}
+
+	public Container RemoveContainer(string serialNum){
+		for(int i = 0; i < containersList.Count(); i++)
+		{
+			if (containersList[i].SerialNum == serialNum)
+			{
+				Container con = containersList[i];
+				containersList.RemoveAt(i);
+				return con;
+			}
+		}
+		return null;
 	}
 
 	public override string ToString()
