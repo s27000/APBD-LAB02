@@ -3,13 +3,15 @@
 public class Ship
 {
 	private int shipID;
-	private List<Container> containers;
+    public int ShipID { get { return shipID; } }
+
+    private List<Container> containers;
 
 	private int speed;
 	private int maxContainerNum;
-	private float maxWeight;
+	private int maxWeight;
 
-	public Ship(int shipID, int speed, int maxContainerNum, float maxWeight)
+	public Ship(int shipID, int speed, int maxContainerNum, int maxWeight)
 	{
 		this.shipID = shipID;
         containers = new List<Container>();
@@ -23,11 +25,7 @@ public class Ship
 		
 	}
 
-	public int GetID()
-	{
-		return shipID;
-	}
-	public string ToString() {
+	public override string ToString() {
 		return "Statek " + shipID
 			+ " (speed=" + speed +
 			", maxContainerNum=" + maxContainerNum

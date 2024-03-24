@@ -3,6 +3,7 @@
 public class Container
 {
 	private string serialNum;
+	public string SerialNum { get { return serialNum; } }
     private int height;
     private int depth;
     private int conWeight;
@@ -33,9 +34,11 @@ public class Container
         productMass = 0;
 	}
 
-    public string ToString()
+	public override string ToString()
 	{
-		return "KONTENER: " + serialNum +
-			"\n";	
- 	}
+		return "Kontener " + serialNum +
+			" (height=" + height + ", depth=" + depth +
+			", conWeight=" + conWeight +
+			", maxProductWeight=" + maxProductWeight;
+    }
 }
