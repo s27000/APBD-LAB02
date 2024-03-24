@@ -38,7 +38,21 @@ namespace ProjektLAB02
                     }
                     if (containerList.Any())
                     {
-
+                        switch (option)
+                        {
+                            case 4:
+                                RemoveContainer();
+                                break;
+                            case 5:
+                                LoadContainer();
+                                break;
+                            case 6:
+                                UnloadContainer();
+                                break;
+                            case 7:
+                                AddContainerToShip();
+                                break;
+                        }
                     }
                 }
             } while (option != 0);
@@ -72,31 +86,33 @@ namespace ProjektLAB02
 
         static void PrintContainerList()
         {
-            if (!containerList.Any()) 
+            if (!containerList.Any())
             {
                 Console.WriteLine("Brak");
             }
             else
             {
-                foreach(Container i in containerList)
+                foreach (Container i in containerList)
                 {
                     Console.WriteLine(i);
                 }
             }
         }
 
-        static void PrintOptions() 
+        static void PrintOptions()
         {
             Console.WriteLine("1. Dodaj kontenerowiec");
             if (shipList.Any())
             {
-                Console.WriteLine(
-                    "2. Usun kontenerowiec" +
+                Console.WriteLine("2. Usun kontenerowiec" +
                     "\n3. Dodaj kontener"
                 );
                 if (containerList.Any())
                 {
-                    Console.WriteLine("4. Usun Kontener");
+                    Console.WriteLine("4. Usun kontener" +
+                        "\n5. Załaduj ładunek do kontenera" +
+                        "\n6. Rozładuj kontener" +
+                        "\n7. Załaduj kontener na statek");
                 }
             }
             Console.WriteLine("0. Wyjscie z programu");
@@ -108,29 +124,35 @@ namespace ProjektLAB02
             int speed = Convert.ToInt32(Console.ReadLine());
             Console.Write("Podaj maksymalną liczbę kontenerów: ");
             int maxContainerNum = Convert.ToInt32(Console.ReadLine());
-            Console.Write("Podaj maksymalną wagę(t) ładunku: ");
+            Console.Write("Podaj maksymalną wagę(kg) ładunku: ");
             int maxWeight = Convert.ToInt32(Console.ReadLine());
             shipList.Add(new Ship(++shipIDCounter, speed, maxContainerNum, maxWeight));
             Console.Clear();
         }
 
-        static void RemoveShip(){
+        static void RemoveShip() {
             Console.WriteLine("USUWANIE STATKU");
             PrintShipList();
             Console.Write("\nPodaj numer statku do usunięcia: ");
             int shipID = Convert.ToInt32(Console.ReadLine());
-
-            for (int i = 0; i < shipList.Count(); i++){
-                if (shipList[i].ShipID==shipID) 
-                {
-                    shipList.RemoveAt(i);
-                    break;
-                }
-            }
             Console.Clear();
+
+            shipList.Remove(findShip(shipID));
         }
 
-        static void AddContainer(){
+        static Ship findShip(int shipID)
+        {
+            foreach (Ship i in shipList)
+            {
+                if (i.ShipID == shipID)
+                {
+                    return i;
+                }
+            }
+            return null;
+        }
+
+        static void AddContainer() {
             Console.WriteLine("DODAWANIE KONTENERA\n" +
                 "Typy:\n" +
                 "1. Kontener na płyny\n" +
@@ -144,13 +166,68 @@ namespace ProjektLAB02
                 case 1:
                     AddLiquidContainer();
                     break;
-                default:
-                    Console.WriteLine("Error: wybrana opcja jest niepoprawna\n");
+                case 2:
+                    AddGazContainer();
                     break;
             }
         }
 
+        static void LoadContainer(){
+            Console.WriteLine("ZAŁADUJ KONTENER");
+            PrintContainerList();
+            Console.Write("Podaj numer seryjny kontenera: ");
+            string serialNum = Console.ReadLine();
+            Console.Write("Podaj mase ladunku: ");
+            int productMass = Convert.ToInt32(Console.ReadLine());
+            Console.Clear();
+            findContainerFromList(serialNum).LoadProduct(productMass);
+        }
+
+        static void UnloadContainer(){
+            Console.WriteLine("ROZŁADUJ KONTENER");
+            PrintContainerList();
+            Console.Write("Podaj numer seryjny kontenera: ");
+            string serialNum = Console.ReadLine();
+            Console.Clear();
+            findContainerFromList(serialNum).UnloadProduct();
+        }
+        static void AddContainerToShip(){
+            Console.WriteLine("ZAŁADOWANIE KONTENER NA STATEK");
+            PrintContainerList();
+            Console.Write("Podaj numer seryjny kontenera: ");
+            string serialNum = Console.ReadLine();
+            PrintShipList();
+            Console.Write("Podaj numer statku: ");
+            int shipID = Convert.ToInt32(Console.ReadLine());
+            Console.Clear();
+
+            Container con = findContainerFromList(serialNum);
+            findShip(shipID).AddContainer(con);
+            containerList.Remove(con);
+        }
+
+        static Container findContainerFromList(String serialNum)
+        {
+            foreach(Container c in containerList)
+            {
+                if (c.SerialNum == serialNum)
+                {
+                    return c;
+                }
+            }
+            return null;
+        }
+        static void RemoveContainer(){
+            Console.WriteLine("USUWANIE KONTENERA");
+            PrintContainerList();
+            Console.Write("Podaj numer seryjny kontenera: ");
+            string serialNum = Console.ReadLine();
+            Console.Clear();
+            containerList.Remove(findContainerFromList(serialNum));
+        }
+
         static void AddLiquidContainer(){
+            Console.WriteLine("DODAWANIE KONTENERA NA PŁYNY");
             Console.Write("Podaj wysokość kontenera: ");
             int height = Convert.ToInt32(Console.ReadLine());
             Console.Write("Podaj głębokość kontenera: ");
@@ -159,9 +236,25 @@ namespace ProjektLAB02
             int conWeight = Convert.ToInt32(Console.ReadLine());
             Console.Write("Podaj maksymalną wagę(kg) ładunku: ");
             int maxProductWeight = Convert.ToInt32(Console.ReadLine());
-            Console.Write("Czy substancja przewożona jest niebezpieczna?: ");
+            Console.Write("Czy substancja przewożona jest niebezpieczna?\n(true) or (false): ");
             bool hazardousLoad = Convert.ToBoolean(Console.ReadLine());
             containerList.Add(new LiquidContainer("KON-L-" + (++containerIDCounter), height, depth, conWeight, maxProductWeight, hazardousLoad));
+            Console.Clear();
+        }
+
+        static void AddGazContainer() {
+            Console.WriteLine("DODAWANIE KONTENERA NA PŁYNY");
+            Console.Write("Podaj wysokość kontenera: ");
+            int height = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Podaj głębokość kontenera: ");
+            int depth = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Podaj wagę(kg) kontenera: ");
+            int conWeight = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Podaj maksymalną wagę(kg) ładunku: ");
+            int maxProductWeight = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Podaj cisnienie(atm) ładunku: ");
+            int pressure = Convert.ToInt32(Console.ReadLine());
+            containerList.Add(new GazContainer("KON-G-" + (++containerIDCounter), height, depth, conWeight, maxProductWeight, pressure));
             Console.Clear();
         }
     }

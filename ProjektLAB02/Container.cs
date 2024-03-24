@@ -6,11 +6,15 @@ public class Container
 	public string SerialNum { get { return serialNum; } }
     private int height;
     private int depth;
-    private int conWeight;
-    private int maxProductWeight;
 
+    private int conWeight;
     private int productMass;
-	public Container(string serialNum, int height, int depth, int conWeight, int maxProductWeight)
+	public int ProductMass { get { return productMass; } set { productMass = value; } }
+	public int TotalMass { get { return conWeight + productMass; } }
+
+    private int maxProductWeight;
+	public int MaxProductWeight { get { return maxProductWeight; } }
+    public Container(string serialNum, int height, int depth, int conWeight, int maxProductWeight)
 	{
 		this.serialNum = serialNum;
 		this.height = height;
@@ -21,13 +25,13 @@ public class Container
         productMass = 0;
 	}
 
-	public void LoadProduct(int productMass)
+	public virtual void LoadProduct(int productMass)
 	{
-		if (productMass > maxProductWeight)
+        this.productMass += productMass;
+		if (this.productMass > maxProductWeight)
 		{
-            throw new OverfillException("cos");
+            throw new OverfillException("Kontener " + serialNum + " jest przeładowany");
 		}
-        this.productMass = productMass;
 	}
 	public void UnloadProduct()
 	{
@@ -39,6 +43,6 @@ public class Container
 		return "Kontener " + serialNum +
 			" (height=" + height + ", depth=" + depth +
 			", conWeight=" + conWeight +
-			", maxProductWeight=" + maxProductWeight;
+			", productMass/maxProductWeight=" + productMass + "/" + maxProductWeight;
     }
 }
